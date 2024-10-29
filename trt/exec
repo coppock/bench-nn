@@ -3,6 +3,8 @@
 import tensorrt as trt
 
 import argparse
+import os
+import sys
 import time
 
 # <https://github.com/NVIDIA/TensorRT/blob/main/samples/python/common.py>
@@ -23,10 +25,13 @@ context = engine.create_execution_context()
 for shape in args.shape if args.shape else []:
     context.set_input_shape(shape.name, shape.opt_shape)
 try:
-    while True:
+    for line in sys.stdin:
         t_i = time.time()
         do_inference(context, engine, bindings, inputs, outputs, stream)
         t_f = time.time()
         try: print(t_f, t_f - t_i, flush=True)
-        except BrokenPipeError: break
+        except BrokenPipeError:
+            devnull = os.open(os.devnull, os.O_WRONLY)
+            os.dup2(devnull, sys.stdout.fileno())
+            break
 except KeyboardInterrupt: pass

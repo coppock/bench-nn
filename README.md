@@ -8,6 +8,11 @@ pip install wheel
 pip install -r requirements.txt
 ```
 
+## Setup
+
+* [Ensure NVIDIA performance counters are accessible.](
+  https://developer.nvidia.com/nvidia-development-tools-solutions-err_nvgpuctrperm-permission-issue-performance-counters)
+
 ## Build
 
 ```sh

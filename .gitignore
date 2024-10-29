@@ -1,4 +1,7 @@
 .venv
 __pycache__
+*.csv
 *.engine
+*.n*-rep
 *.onnx
+*.png
