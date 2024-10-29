@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+import tensorrt as trt
+
+import argparse
+import time
+
+# <https://github.com/NVIDIA/TensorRT/blob/main/samples/python/common.py>
+from common_runtime import allocate_buffers, do_inference
+from logger import Logger
+from shape import Shape
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-s', '--shape', action='append', type=Shape)
+parser.add_argument('engine')
+args = parser.parse_args()
+
+logger = Logger()
+with open(args.engine, 'rb') as f, trt.Runtime(logger) as rt:
+    engine = rt.deserialize_cuda_engine(f.read())
+inputs, outputs, bindings, stream = allocate_buffers(engine, 0)
+context = engine.create_execution_context()
+for shape in args.shape if args.shape else []:
+    context.set_input_shape(shape.name, shape.opt_shape)
+try:
+    while True:
+        t_i = time.time()
+        do_inference(context, engine, bindings, inputs, outputs, stream)
+        t_f = time.time()
+        try: print(t_f, t_f - t_i, flush=True)
+        except BrokenPipeError: break
+except KeyboardInterrupt: pass
