@@ -1,3 +1,9 @@
 [submodule "third-party/TensorRT"]
 	path = third-party/TensorRT
 	url = https://github.com/NVIDIA/TensorRT.git
+[submodule "third-party/TensorRT-LLM"]
+	path = third-party/TensorRT-LLM
+	url = https://github.com/NVIDIA/TensorRT-LLM.git
+[submodule "gpt-j-6b"]
+	path = third-party/gpt-j-6b
+	url = git@hf.co:EleutherAI/gpt-j-6b.git

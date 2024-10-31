@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+
+# Why, NVIDIA, why?
+import os
+import sys
+stdout_fileno = os.dup(sys.stdout.fileno())
+stdout = os.fdopen(stdout_fileno, 'w')
+os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
+
+import torch
+from tensorrt_llm.runtime import ModelRunnerCpp
+
+import argparse
+import signal
+import time
+
+from utils import read_model_name, load_tokenizer
+
+parser = argparse.ArgumentParser()
+parser.add_argument('tokenizer')
+parser.add_argument('engine')
+parser.add_argument('-l', '--input-len', default=1, type=int)
+parser.add_argument('-n', '--batch-size', default=1, type=int)
+parser.add_argument('-t', '--max-tokens-in-paged-kv-cache', type=int)
+args = parser.parse_args()
+
+runner = ModelRunnerCpp.from_dir(
+    args.engine,
+    max_tokens_in_paged_kv_cache=args.max_tokens_in_paged_kv_cache,
+)
+model_name, model_version = read_model_name(args.engine)
+_, pad_id, end_id = load_tokenizer(args.tokenizer, model_name=model_name,
+                                   model_version=model_version)
+
+done = False
+def handler(*_):
+    global done
+    done = True
+for signum in signal.SIGTERM, signal.SIGINT: signal.signal(signum, handler)
+while not done:
+    t_i = time.time()
+    batch_input_ids = torch.empty((args.batch_size, args.input_len),
+                                  dtype=torch.int)
+    with torch.no_grad():
+        outputs = runner.generate(batch_input_ids, pad_id=pad_id,
+                                  end_id=end_id)
+        torch.cuda.synchronize()
+    t_f = time.time()
+    try: print(t_f, t_f - t_i, file=stdout, flush=True)
+    except BrokenPipeError:
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull, stdout_fileno)
+        break

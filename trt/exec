@@ -13,8 +13,8 @@ from common_runtime import allocate_buffers, do_inference
 from logger import Logger
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-n', '--batch-size', default=1, type=int)
 parser.add_argument('engine')
+parser.add_argument('-n', '--batch-size', default=1, type=int)
 args = parser.parse_args()
 
 logger = Logger()

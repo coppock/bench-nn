@@ -1,5 +1,7 @@
 .venv
 __pycache__
+checkpoint
+engine
 *.csv
 *.engine
 *.n*-rep
