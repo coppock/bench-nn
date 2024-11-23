@@ -1,5 +1,2 @@
-export PYTHONPATH=`dirname $0`/../opt/TensorRT/demo/Diffusion
-lib=`dirname $0`/../lib/sdxl
-exec python `dirname $0`/../share/sdxl.py $* \
-    --framework-model-dir=$lib/pytorch_model --onnx-dir=$lib/onnx \
-    --engine-dir=$lib/engine
+exec python `dirname $0`/../share/diffusers_.py $* \
+    stabilityai/stable-diffusion-xl-base-1.0

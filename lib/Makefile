@@ -55,4 +55,3 @@ retinanet.zip:
 
 sdxl:
 	../bin/sdxl -m1
-	touch sdxl

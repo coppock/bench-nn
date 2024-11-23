@@ -1,6 +1,14 @@
-cuda-python
-onnxruntime-gpu
+# cuda-python # For SDXL
+onnxruntime-gpu # For RetinaNet
 polygraphy
--r third-party/TensorRT-LLM/examples/gptj/requirements.txt
--r third-party/TensorRT/demo/Diffusion/requirements.txt
--r third-parth/training/single_stage_detector/requirements.txt
+
+# For diffusers
+diffusers
+invisible_watermark
+transformers
+accelerate
+safetensors
+
+-r opt/TensorRT-LLM/examples/gptj/requirements.txt
+# -r opt/TensorRT/demo/Diffusion/requirements.txt
+-r opt/training/single_stage_detector/requirements.txt
