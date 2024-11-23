@@ -1,6 +1,8 @@
 gptj
 sdxl
+*.cache
 *.engine
+*.log
 *.onnx
 *.pth
 *.zip

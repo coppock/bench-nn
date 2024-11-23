@@ -1,2 +1,2 @@
-exec python `dirname $0`/../share/polygraphy.py $* \
+exec python `dirname $0`/../share/polygraphy_.py $* \
     `dirname $0`/../lib/`basename $0`.onnx
