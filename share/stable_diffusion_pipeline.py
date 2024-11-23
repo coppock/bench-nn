@@ -1,0 +1,1 @@
+../opt/TensorRT/demo/Diffusion/stable_diffusion_pipeline.py

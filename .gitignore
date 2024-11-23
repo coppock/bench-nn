@@ -1,9 +1,6 @@
 .venv
+.vscode
 __pycache__
-checkpoint
-engine
 *.csv
-*.engine
 *.n*-rep
-*.onnx
 *.png

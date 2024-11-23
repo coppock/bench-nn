@@ -1,0 +1,2 @@
+exec python `dirname $0`/../share/poly.py $* \
+    `dirname $0`/../lib/`basename $0`.engine

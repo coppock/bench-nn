@@ -1,0 +1,1 @@
+../opt/TensorRT/demo/Diffusion/demo_txt2img_xl.py

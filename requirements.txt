@@ -1,3 +1,6 @@
 cuda-python
-tensorrt
+onnxruntime-gpu
+polygraphy
 -r third-party/TensorRT-LLM/examples/gptj/requirements.txt
+-r third-party/TensorRT/demo/Diffusion/requirements.txt
+-r third-parth/training/single_stage_detector/requirements.txt

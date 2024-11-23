@@ -1,9 +1,12 @@
 [submodule "third-party/TensorRT"]
-	path = third-party/TensorRT
+	path = opt/TensorRT
 	url = https://github.com/NVIDIA/TensorRT.git
 [submodule "third-party/TensorRT-LLM"]
-	path = third-party/TensorRT-LLM
+	path = opt/TensorRT-LLM
 	url = https://github.com/NVIDIA/TensorRT-LLM.git
 [submodule "gpt-j-6b"]
-	path = third-party/gpt-j-6b
+	path = opt/gpt-j-6b
 	url = git@hf.co:EleutherAI/gpt-j-6b.git
+[submodule "third-party/training"]
+	path = opt/training
+	url = https://github.com/mlcommons/training.git

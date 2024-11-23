@@ -1,5 +1,8 @@
 ## Requirements
 
+* CUDA 12
+* cuDNN 9
+
 ```sh
 sudo apt update
 sudo apt install -y libopenmpi-dev
@@ -21,7 +24,7 @@ make
 
 ## To Do
 
-* [ ] Implement _trt/llmexec_ with command-line parameters
+* [X] Implement _trt/llmexec_ with command-line parameters
   - Input and output sequence lengths
   - Batch size
 * [ ] How does LC latency scale with BE batch size or input sequence length?
@@ -35,9 +38,9 @@ make
     + Grid launch _wave_ duration
     + Utilization of various resources
 * More models
-  - [ ] RetinaNet
-  - [ ] 3D U-Net
-  - [ ] Llama 3 70B
+  - [X] RetinaNet
+  - [X] 3D U-Net
+  - [ ] Llama 2 70B
   - [ ] Mixtral 8x7B
-  - [ ] SDXL 1.0
+  - [X] SDXL 1.0
   - [ ] DLRM-DCNv2

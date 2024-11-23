@@ -1,0 +1,6 @@
+gptj
+sdxl
+*.engine
+*.onnx
+*.pth
+*.zip
