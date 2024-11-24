@@ -1,2 +1,2 @@
 exec python `dirname $0`/../share/trtllm.py $* -t2048 \
-    `dirname $0`/../share/gpt-j-6b `dirname $0`/../lib/gptj/engine
+    `dirname $0`/../opt/gpt-j-6b `dirname $0`/../lib/gptj/engine
