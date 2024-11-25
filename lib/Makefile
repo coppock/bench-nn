@@ -1,6 +1,6 @@
 OPT = ../opt
 
-all: resnet.engine bert.engine gptj/engine retinanet.onnx 3dunet.engine
+all: resnet.engine bert.engine gptj/engine retinanet.engine 3dunet.engine
 
 resnet.engine: resnet.onnx
 	polygraphy convert -oresnet.engine resnet.onnx \
@@ -32,17 +32,12 @@ gptj/checkpoint:
 	python $(OPT)/TensorRT-LLM/examples/gptj/convert_checkpoint.py \
 	    --model_dir=$(OPT)/gpt-j-6b --output_dir=gptj/checkpoint
 
-retinanet.onnx: retinanet_model_10.pth
-	PYTHONPATH=$(OPT)/training/single_stage_detector/ssd \
-	    $(OPT)/training/single_stage_detector/scripts/pth_to_onnx.py \
-	    --input=retinanet_model_10.pth --output=retinanet.onnx \
-	    --image-size 800 800
+retinanet.engine: retinanet.onnx
+	polygraphy convert -oretinanet.engine retinanet.onnx
 
-retinanet_model_10.pth: retinanet_model_10.zip
-	unzip retinanet_model_10.zip
-
-retinanet_model_10.zip:
-	curl -O https://zenodo.org/records/6605272/files/retinanet_model_10.zip
+retinanet.onnx:
+	curl https://zenodo.org/records/6617879/files/resnext50_32x4d_fpn.onnx \
+	    >retinanet.onnx
 
 3dunet.engine: 3dunet.onnx
 	polygraphy convert -o3dunet.engine 3dunet.onnx \
