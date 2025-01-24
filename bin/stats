@@ -1,0 +1,5 @@
+mkfifo $0.$$
+tail +2 ${1}_cuda_gpu_trace.tsv >$0.$$ &
+tail +2 ${1}_cuda_api_trace.tsv | join - $0.$$ -15 -23 -a1 &
+wait
+rm $0.$$

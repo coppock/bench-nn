@@ -11,4 +11,4 @@ safetensors
 
 -r opt/TensorRT-LLM/examples/gptj/requirements.txt
 # -r opt/TensorRT/demo/Diffusion/requirements.txt
--r opt/training/single_stage_detector/requirements.txt
+# -r opt/training/single_stage_detector/requirements.txt

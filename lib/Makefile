@@ -1,6 +1,6 @@
 OPT = ../opt
 
-all: resnet.engine bert.engine gptj/engine retinanet.engine 3dunet.engine
+all: resnet.engine bert.engine gptj/engine retinanet.onnx 3dunet.engine
 
 resnet.engine: resnet.onnx
 	polygraphy convert -oresnet.engine resnet.onnx \

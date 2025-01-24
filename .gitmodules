@@ -4,3 +4,6 @@
 [submodule "gpt-j-6b"]
 	path = opt/gpt-j-6b
 	url = git@hf.co:EleutherAI/gpt-j-6b.git
+[submodule "opt/GenerativeAIExamples"]
+	path = opt/GenerativeAIExamples
+	url = https://github.com/nvidia/GenerativeAIExamples.git
