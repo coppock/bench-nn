@@ -1,2 +1,3 @@
+#!/bin/sh
 exec python `dirname $0`/../share/diffusers_.py $* \
     stabilityai/stable-diffusion-xl-base-1.0
