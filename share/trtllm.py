@@ -1,33 +1,24 @@
+import random
+
 from common import *
 
 parser = ArgumentParser()
-parser.add_argument('tokenizer')
 parser.add_argument('engine')
-parser.add_argument('-l', '--input-length', default=1, type=int)
-parser.add_argument('-t', '--maximum-tokens-in-paged-kv-cache', type=int)
+parser.add_argument('tokenizer')
+parser.add_argument('-l', '--input-length', default=64, type=int)
+parser.add_argument('-t', '--max-tokens', type=int)
 args = parser.parse_args()
 
 # This should happen before importation of tensorrt_llm in order to handle
 # stdout abuse.
 iter = Iterator(args.iteration_count)
 
-import torch
-from tensorrt_llm.runtime import ModelRunnerCpp
+from tensorrt_llm.llmapi import LLM, KvCacheConfig, SamplingParams
 
-from utils import read_model_name, load_tokenizer
-
-runner = ModelRunnerCpp.from_dir(
-    args.engine,
-    max_tokens_in_paged_kv_cache=args.maximum_tokens_in_paged_kv_cache,
-)
-model_name, model_version = read_model_name(args.engine)
-_, pad_id, end_id = load_tokenizer(args.tokenizer, model_name=model_name,
-                                   model_version=model_version)
+kv_cache_config = KvCacheConfig(max_tokens=args.max_tokens)
+llm = LLM(args.engine, args.tokenizer, kv_cache_config=kv_cache_config)
+sampling_params = SamplingParams(max_tokens=1)
 
 for _ in iter:
-    batch_input_ids = torch.empty((args.batch_size, args.input_length),
-                                  dtype=torch.int)
-    with torch.no_grad():
-        outputs = runner.generate(batch_input_ids, pad_id=pad_id,
-                                  end_id=end_id)
-        torch.cuda.synchronize()
+    prompt = [random.randint(0, 2**31 - 1) for _ in range(args.input_length)]
+    llm.generate(prompt, sampling_params=sampling_params, use_tqdm=False)
