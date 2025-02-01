@@ -1,6 +1,6 @@
 OPT = ../opt
 
-all: resnet.engine bert.engine gptj/engine retinanet.onnx 3dunet.engine
+all: resnet.engine bert.engine retinanet.onnx 3dunet.engine
 
 resnet.engine: resnet.onnx
 	polygraphy convert -oresnet.engine resnet.onnx \
@@ -21,16 +21,6 @@ bert.engine: bert.onnx
 
 bert.onnx:
 	curl https://zenodo.org/records/3733910/files/model.onnx >bert.onnx
-
-gptj/engine: gptj/checkpoint
-	trtllm-build --checkpoint_dir=gptj/checkpoint --gemm_plugin=float16 \
-	    --max_batch_size=16 --remove_input_padding=enable \
-	    --output_dir=gptj/engine
-	touch gptj/engine
-
-gptj/checkpoint:
-	python $(OPT)/TensorRT-LLM/examples/gptj/convert_checkpoint.py \
-	    --model_dir=$(OPT)/gpt-j-6b --output_dir=gptj/checkpoint
 
 retinanet.engine: retinanet.onnx
 	polygraphy convert -oretinanet.engine retinanet.onnx

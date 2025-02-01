@@ -1,6 +1,7 @@
-# cuda-python # For SDXL
-onnxruntime-gpu # For RetinaNet
 polygraphy
+tensorrt
+onnxruntime-gpu # For RetinaNet
+vllm # For GPT-J
 
 # For diffusers
 diffusers
@@ -8,7 +9,3 @@ invisible_watermark
 transformers
 accelerate
 safetensors
-
--r opt/TensorRT-LLM/examples/gptj/requirements.txt
-# -r opt/TensorRT/demo/Diffusion/requirements.txt
-# -r opt/training/single_stage_detector/requirements.txt
