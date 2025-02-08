@@ -1,0 +1,2 @@
+#!/bin/sh
+exec python3 `dirname $0`/../share/llm.py $* EleutherAI/gpt-j-6b

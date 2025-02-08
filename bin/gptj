@@ -1,2 +1,0 @@
-#!/bin/sh
-exec python `dirname $0`/../share/vllm_.py $* EleutherAI/gpt-j-6b

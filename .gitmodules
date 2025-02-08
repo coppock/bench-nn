@@ -7,3 +7,6 @@
 [submodule "opt/GenerativeAIExamples"]
 	path = opt/GenerativeAIExamples
 	url = https://github.com/nvidia/GenerativeAIExamples.git
+[submodule "opt/Meta-Llama-3-8B"]
+	path = opt/Meta-Llama-3-8B
+	url = git@hf.co:meta-llama/Meta-Llama-3-8B.git
