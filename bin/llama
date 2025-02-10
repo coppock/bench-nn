@@ -1,0 +1,4 @@
+#!/bin/sh
+root=`dirname $0`/..
+exec python3 $root/share/trtllm.py $* -t$root/opt/Meta-Llama-3-8B \
+    $root/lib/llama/engine

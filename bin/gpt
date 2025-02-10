@@ -1,2 +1,4 @@
 #!/bin/sh
-exec python3 `dirname $0`/../share/llm.py $* EleutherAI/gpt-j-6b
+root=`dirname $0`/..
+exec python3 $root/share/trtllm.py $* -c2048 -t$root/opt/gpt-j-6b \
+    $root/lib/gpt/engine
