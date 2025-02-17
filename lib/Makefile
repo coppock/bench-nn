@@ -1,8 +1,8 @@
 OPT = $$PWD/../opt
 NVIDIA_RELEASE = 24.12
+DEVICES = 0
 
-DOCKERFLAGS = -u`id -u` -v$$PWD:$$PWD -w$$PWD \
-    --gpus=\"device=$${CUDA_VISIBLE_DEVICES-1}\" --rm
+DOCKERFLAGS = -u`id -u` -v$$PWD:$$PWD -w$$PWD --gpus=\"device=$(DEVICES)\" --rm
 
 all: resnet.engine retinanet.onnx 3dunet.engine llama/engine gpt/engine \
     bert.engine
