@@ -1,9 +1,12 @@
 from argparse import ArgumentParser
 import itertools
+import os
 import signal
 import sys
 import time
 
+stdout = os.fdopen(os.dup(sys.stdout.fileno()), 'w')
+os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
 from tensorrt_llm.llmapi import LLM, SamplingParams, KvCacheConfig
 
 
@@ -38,7 +41,7 @@ def main():
               kv_cache_config=KvCacheConfig(max_tokens=args.max_tokens))
     prompt = args.batch_size * [[0 for _ in range(args.input_length)]]
     sampling_params = SamplingParams(max_tokens=1)
-    file = open(args.file, 'w') if args.file else sys.stdout
+    file = open(args.file, 'w') if args.file else stdout
     for _ in (range(args.iteration_count) if args.iteration_count
               else itertools.count()):
         if done:
