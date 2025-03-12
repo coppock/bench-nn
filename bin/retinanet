@@ -1,3 +1,3 @@
 #!/bin/sh
-exec python `dirname $0`/../share/polygraphy_.py $* \
+exec python `dirname $0`/../share/ort.py $* \
     `dirname $0`/../lib/`basename $0`.onnx

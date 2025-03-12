@@ -5,7 +5,7 @@ DEVICES = 0
 DOCKERFLAGS = -u`id -u` -v$$PWD:$$PWD -w$$PWD --gpus=\"device=$(DEVICES)\" --rm
 
 all: resnet.engine retinanet.onnx 3dunet.engine llama/engine gpt/engine \
-    bert.engine
+    bert.engine yolo.engine
 
 resnet.engine: resnet.onnx
 	polygraphy convert -oresnet.engine resnet.onnx \
@@ -72,3 +72,13 @@ bert.engine: bert.onnx
 
 bert.onnx:
 	curl https://zenodo.org/records/3733910/files/model.onnx >bert.onnx
+
+yolo.engine: yolo.onnx
+	CUDA_VISIBLE_DEVICES=1 polygraphy convert -oyolo.engine yolo.onnx \
+	    --trt-min-shapes input_1:0:[1,416,416,3]  \
+	    --trt-opt-shapes input_1:0:[1,416,416,3] \
+	    --trt-max-shapes input_1:0:[16,416,416,3]
+
+yolo.onnx:
+	curl -L >yolo.onnx \
+	    https://github.com/onnx/models/raw/main/validated/vision/object_detection_segmentation/yolov4/model/yolov4.onnx
