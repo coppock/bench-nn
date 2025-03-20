@@ -7,15 +7,24 @@ import time
 
 stdout = os.fdopen(os.dup(sys.stdout.fileno()), 'w')
 os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
-from tensorrt_llm.llmapi import LLM, SamplingParams, KvCacheConfig
+
+import torch
+from tensorrt_llm.logger import logger
+from tensorrt_llm.runtime import ModelRunnerCpp
+
+from run import parse_input
+from utils import read_model_name, load_tokenizer
+
+DONE = False
+PROMPTS = [
+    'hello',
+]
+MAX_OUTPUT_LEN = 1
 
 
-done = False
-
-
-def handler(self, *_):
-    global done
-    done = True
+def handler(*_):
+    global DONE
+    DONE = True
 
 
 def main():
@@ -37,17 +46,42 @@ def main():
     parser.add_argument('-v', '--use-vllm', action='store_true')
     args = parser.parse_args()
 
-    llm = LLM(model=args.model, tokenizer=args.tokenizer,
-              kv_cache_config=KvCacheConfig(max_tokens=args.max_tokens))
-    prompt = args.batch_size * [[0 for _ in range(args.input_length)]]
-    sampling_params = SamplingParams(max_tokens=1)
+    runner = ModelRunnerCpp.from_dir(
+        args.model,
+        max_output_len=MAX_OUTPUT_LEN,
+        max_tokens_in_paged_kv_cache=args.max_tokens,
+    )
+    model_name, model_version = read_model_name(args.model)
+    logger.debug(f'Model name {model_name}, model version {model_version}')
+    tokenizer, pad_id, end_id = load_tokenizer(args.tokenizer,
+                                               model_name=model_name,
+                                               model_version=model_version)
     file = open(args.file, 'w') if args.file else stdout
     for _ in (range(args.iteration_count) if args.iteration_count
               else itertools.count()):
-        if done:
+        if DONE:
             break
         t_i = time.time()
-        llm.generate(prompt, sampling_params=sampling_params, use_tqdm=False)
+
+        batch_input_ids = parse_input(
+            tokenizer,
+            itertools.islice(itertools.cycle([' '.join([p]*args.input_length) for p in PROMPTS]), args.batch_size),
+            pad_id=pad_id,
+            model_name=model_name,
+            model_version=model_version,
+        )
+        logger.debug(repr(batch_input_ids))
+        with torch.no_grad():
+            runner.generate(
+                batch_input_ids,
+                max_new_tokens=MAX_OUTPUT_LEN,
+                end_id=end_id,
+                pad_id=pad_id,
+                output_sequence_lengths=True,
+                return_dict=True,
+            )
+            torch.cuda.synchronize()
+
         t_f = time.time()
         print(t_f, t_f - t_i, file=file, flush=True)
 
