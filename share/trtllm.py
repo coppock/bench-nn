@@ -19,7 +19,6 @@ DONE = False
 PROMPTS = [
     'hello',
 ]
-MAX_OUTPUT_LEN = 1
 
 
 def handler(*_):
@@ -28,10 +27,10 @@ def handler(*_):
 
 
 def main():
-    '''
+    """
     For some reason, we can't just put the main body directly in the if block;
     otherwise, the program will hang after completion.
-    '''
+    """
     for signum in signal.SIGTERM, signal.SIGINT:
         signal.signal(signum, handler)
 
@@ -40,6 +39,7 @@ def main():
     parser.add_argument('-c', '--max-tokens', default=8192, type=int)
     parser.add_argument('-f', '--file')
     parser.add_argument('-l', '--input-length', default=64, type=int)
+    parser.add_argument('-o', '--output-length', default=1, type=int)
     parser.add_argument('-m', '--iteration-count', type=int)
     parser.add_argument('-n', '--batch-size', default=1, type=int)
     parser.add_argument('-t', '--tokenizer')
@@ -48,7 +48,7 @@ def main():
 
     runner = ModelRunnerCpp.from_dir(
         args.model,
-        max_output_len=MAX_OUTPUT_LEN,
+        max_output_len=args.output_length,
         max_tokens_in_paged_kv_cache=args.max_tokens,
     )
     model_name, model_version = read_model_name(args.model)
@@ -74,7 +74,7 @@ def main():
         with torch.no_grad():
             runner.generate(
                 batch_input_ids,
-                max_new_tokens=MAX_OUTPUT_LEN,
+                max_new_tokens=args.output_length,
                 end_id=end_id,
                 pad_id=pad_id,
                 output_sequence_lengths=True,
