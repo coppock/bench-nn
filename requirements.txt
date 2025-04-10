@@ -1,7 +1,7 @@
 polygraphy
-tensorrt
+tensorrt~=10.7.0
 onnxruntime-gpu # For RetinaNet
-vllm # For GPT-J
+tensorrt-llm~=0.16.0
 
 # For diffusers
 diffusers
