@@ -83,7 +83,7 @@ def main():
             torch.cuda.synchronize()
 
         t_f = time.time()
-        print(t_f, t_f - t_i, file=file, flush=True)
+        print(t_i, t_f - t_i, file=file, flush=True)
 
 
 if __name__ == '__main__':
